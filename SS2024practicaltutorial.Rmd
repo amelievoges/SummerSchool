@@ -1,0 +1,116 @@
+---
+title: "SSpsych 2024 practical lab code"
+author: "WT"
+date: "16/06/2024"
+output: html_document
+---
+
+In this tutorial, you will analyse and visualise research data from the health psychology experiment you completed as an afterclass activity in week 1.
+
+In the experiment, you saw a menu with vegetable-based items and you were asked to rate how attractive you found the menu items, and how likely you would order them in the future.
+
+You were assigned to one of two conditions: either your menu was health-focused or taste-focused. We hypothesise that participants will find the taste-focused menu items more attractive.
+
+DEPENDENT VARIABLE: Attractiveness and future ordering intention
+INDEPENDENT VARIABLE: Menu condition (taste/health)
+
+The following steps will talk you through the process of cleaning the data and visualising it.
+
+
+
+Step 1: Load in the packages and your data. Run the below code by putting the cursor on the line and hitting ctrl enter, or cmd enter on a Mac.
+```{r}
+library(tidyverse)
+data <- read_csv("sspsych_practicaldata.csv")
+```
+
+Step 2: Look at the data. On the top right hand side you should now have `data`, and if you click it, it will appear as a new tab. You can see that the datafile is big and has a lot of unnecessary information.
+
+
+Step 3: Let's clean up the data a bit so it's easier to work with. The below code will only keep the columns which are useful to us.
+```{r}
+data_select <- select(data, user_id, user_sex, user_age, condition, attractive, order)
+```
+
+
+Step 4: Calculate demographic information
+```{r}
+mean_age <- summarise(data_select, mean_age=mean(user_age), min_age=min(user_age), max_age=max(user_age))
+```
+
+
+Step 5: Calculate descriptive statistics. We want to know what the average scores for each of the questions are. The example shows how to do this for the attractiveness question. See if you can work out how to do it for the ordering intention question yourself (it's called `order`on the dataframe)
+```{r}
+mean_attractive <- summarise(data_select,mean_att=mean(attractive))
+
+mean_order <- 
+```
+
+Step 6A: Let's visualise the data! First we'll make a bar graph of the attractiveness ratings across the two conditions.
+```{r}
+ggplot(data_select, aes(x = condition, y = attractive)) +
+  stat_summary(fun = "mean", geom = "bar")
+
+```
+
+Step 6B: See if you can modify the code from 6A and work out how to do the plot for the ordering intention question yourself 
+```{r}
+ggplot()
+```
+
+Step 7:
+How would you interpret these graphs?
+
+
+Step 8: This graph is very ugly - let's make it look nicer. The top code uses the default colours from R. The bottom code sets the colours manually. Modify the bottom code to change the colours.
+
+HINT: type colours() to your console (bottom left panel) to see all the colour options
+```{r}
+ggplot(data_select, aes(x = condition, y = attractive, fill=condition)) +
+stat_summary(fun = "mean", geom = "bar")+theme_bw()
+
+
+
+ggplot(data_select, aes(x = condition, y = attractive, fill=condition)) +
+stat_summary(fun = "mean", geom = "bar")+
+scale_fill_manual(values= c("thistle3", "steelblue4"))+theme_bw()
+
+```
+
+
+Step 9A: Make a better graph. Bar graphs are terrible - they don't tell us anything about the distribution of the data, and it's very easy to hide things in bar graphs. We want to do better and be more transparent about our data. We are going to make a grouped density plot to have a better understanding of the distributions
+```{r}
+ggplot(data_select, aes(x = attractive, fill = condition)) +
+  geom_density(alpha=0.7)+
+  scale_x_continuous(name = "Rating") +
+  scale_fill_manual(values=c("snow", "springgreen3"))+
+  theme_bw()
+```
+
+
+Step 9B: Make the same graph as in step 9A, but for ordering intention instead of attractiveness, and change the colours to your preferred colours 
+```{r}
+ggplot(, aes(x = , fill = )) +
+  geom_density(alpha=0.5)+
+  scale_x_continuous(name = "Rating") +
+  scale_fill_manual(values=c("", ""))+
+  theme_bw()
+```
+
+Step 10: Save the plot you have made in step 9B. You will need this for the reflection task this week. The code below will save your plot in the folder where you put the files.
+
+```{r}
+ggsave(filename = "my_plot.png")
+```
+
+
+Step 11: Look at the last plot you made and write a small paragraph interpreting the findings. Which condition has higher attractiveness ratings, and which group has higher future ordering intention? Was our hypothesis supported?
+
+
+Well done! You have successfully used R code to visualise and interpret actual research data, which is a very impressive achievement :)
+
+
+
+
+
+
